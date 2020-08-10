@@ -14,6 +14,7 @@ class Training extends Model
         'description',
         'trainer',
         'user_id',
+        'attachment',
         'status'
     ];
 

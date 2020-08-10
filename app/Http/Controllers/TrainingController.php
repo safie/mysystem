@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//Add Auth facade to get current user info
 use illuminate\Support\Facades\Auth;
+//Add Storage facade
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 use App\Training;
 
 class TrainingController extends Controller
@@ -50,6 +55,20 @@ class TrainingController extends Controller
         $training->description = $request->get('description');
         $training->trainer = $request->get('trainer');
         $training->user_id = Auth::user()->id;
+        //Is file selected?
+        if ($request->hasFile('attachment')){
+            //Change filename
+            //Example: From File_Name.png to 2020-04-06-File_Name.png
+            $filename = date('Y-m-d') . '-' .$request->attachment->getClientOriginalName();
+
+            //Store image file to web server
+            Storage::disk('public')->put($filename, File::get($request->attachment));
+
+            //fetch filename to save to db
+            $training->attachment = $filename;
+        } //End file upload process
+
+
         $training->save();
 
         return redirect('/trainings/'. $training->id);
@@ -107,6 +126,10 @@ class TrainingController extends Controller
     public function destroy($id)
     {
         $training = Training::find($id);
+        //Remove file from storage when a record is deleted
+        if ($training->attachment != null){
+            Storage::disk('public')->delete($training->attachment);
+        }
         $training->delete();
         return redirect ()
             ->route('training:index')

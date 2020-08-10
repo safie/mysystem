@@ -21,6 +21,17 @@
         </div>
 
         <div class="mt-2">
+            <label>Attachment</label>
+            <input name="attachment" value="{{ $training->attachment }}" type="text" class="form-control" readonly>
+            <!-- Display image if available-->
+            @if ($training->attachment == null)
+                <label>Image not available</label>
+            @else
+                <div class="mt-2"><img src="{{ asset('/storage/' . $training->attachment) }}" width="300"></div>
+            @endif
+        </div>
+
+        <div class="mt-2">
             <label>Submitted</label>
             <input name="user_id" value="{{ $training->user->name }}" type="text" class="form-control" readonly>
         </div>

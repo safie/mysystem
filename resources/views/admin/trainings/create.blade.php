@@ -22,6 +22,8 @@
 
     <div class="mt-2">
         <label>Attachment <small>(Upload image file only)</small></label>
+        <!-- input type=file -->
+        <input type="file" name="attachment" .value"{{ old('attachment') }} class="form-control">
     </div>
 
     <!--Submit Button-->
