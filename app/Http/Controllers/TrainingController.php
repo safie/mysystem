@@ -112,6 +112,19 @@ class TrainingController extends Controller
         $training->description = $request->get('description');
         $training->trainer = $request->get('trainer');
         $training->status = $request->get('status');
+         //Is file selected?
+         if ($request->hasFile('attachment')){
+            //Change filename
+            //Example: From File_Name.png to 2020-04-06-File_Name.png
+            $filename = date('Y-m-d') . '-' .$request->attachment->getClientOriginalName();
+
+            //Store image file to web server
+            Storage::disk('public')->put($filename, File::get($request->attachment));
+
+            //fetch filename to save to db
+            $training->attachment = $filename;
+        } //End file upload process
+
         $training->save();
 
         return redirect('/trainings/'. $training->id);
