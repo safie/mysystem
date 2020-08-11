@@ -26,6 +26,12 @@ class TrainingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         if($request->get('keyword') != null){

@@ -27,7 +27,29 @@
             @if ($training->attachment == null)
                 <label>Image not available</label>
             @else
-                <div class="mt-2"><img src="{{ asset('/storage/' . $training->attachment) }}" width="300"></div>
+                {{-- Get File extension --}}
+                @php
+                    $file_ext = pathinfo(asset('/storage' .$training->attachment), PATHINFO_EXTENSION);
+                @endphp
+
+                {{-- Check file extension and view accordingly --}}
+                @if ($file_ext == 'doc' || $file_ext == 'docx')
+                    <div class="mt-2">
+                        <a href="{{ asset('/storage/' .$training->attachment) }}">
+                            {{ $training->attachment }}
+                        </a>
+                    </div>
+                @elseif ($file_ext == 'pdf')
+                    <div class="mt-2">
+                        <a href="{{ asset('/storage/' .$training->attachment) }}">
+                        <img src="{{ asset('/icon/icon-pdf.png') }}" width="100">
+                            {{ $training->attachment }}
+                        </a>
+                    </div>
+                @else
+                    <div class="mt-2"><img src="{{ asset('/storage/' . $training->attachment) }}" width="300"></div>
+                @endif
+
             @endif
         </div>
 
